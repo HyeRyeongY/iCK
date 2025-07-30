@@ -1,0 +1,50 @@
+{
+  "name": "just-tag-it",
+  "version": "1.0.1",
+  "description": "A lightweight desktop application for image classification",
+  "author": "JustTagIt Team",
+  "main": "public/electron.js",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "electron": "electron public/electron.js",
+    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron public/electron.js\"",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "concurrently": "^8.2.0",
+    "electron": "^25.3.1",
+    "electron-builder": "^24.6.3",
+    "vite": "^4.4.5",
+    "wait-on": "^7.0.1"
+  },
+  "build": {
+    "appId": "com.justtagit.app",
+    "productName": "JustTagIt",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "dist/**/*",
+      "public/electron.js",
+      "public/preload.js",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
