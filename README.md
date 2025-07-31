@@ -1,47 +1,59 @@
-# iCK!
+# iCK! - image Classification by Keys!
+
+**버전 1.1.0**
 
 Electron과 React로 제작된 가벼운 이미지 분류 데스크톱 애플리케이션입니다.
+키보드 단축키를 사용하여 빠르고 효율적으로 이미지를 분류할 수 있습니다.
 
-## 기능
+## ✨ 주요 기능
 
-- 선택한 디렉토리에서 이미지 로드
-- 화살표 키(← / →)를 사용한 이미지 탐색
-- 최대 10개의 커스텀 라벨 생성 (개인화된 이름 설정 가능)
-- 숫자 키(0-9)를 사용한 이미지 분류
-- 분류된 이미지를 지정된 폴더로 자동 이동
-- 쉬운 식별을 위한 시각적 색상 코딩 라벨
-- 깔끔하고 직관적인 사용자 인터페이스
-- Windows 실행 파일(.exe) 배포
+- 🖼️ **다양한 이미지 포맷 지원** - JPEG, PNG, GIF, BMP, WebP
+- ⚡ **빠른 키보드 분류** - 화살표 키(← / →)로 이미지 탐색, 숫자 키(0-9)로 즉시 분류
+- 🏷️ **커스텀 라벨** - 최대 10개의 개인화된 분류 카테고리 생성
+- 📁 **자동 파일 이동** - 분류된 이미지를 지정된 폴더로 자동 이동
+- 🎨 **시각적 색상 코딩** - 각 라벨별 고유 색상으로 쉬운 식별
+- 🖥️ **직관적 UI** - 깔끔하고 사용하기 쉬운 인터페이스
+- 📱 **완전 오프라인** - 인터넷 연결 없이도 완전한 기능 사용
+- 🏃‍♂️ **빠른 실행** - 설치 후 바로 사용 가능
 
-## Installation
+## 설치 방법
 
-### Prerequisites
+### 일반 사용자용 (권장)
+
+1. **[Releases](https://github.com/your-repo/ick/releases)** 페이지에서 최신 버전의 `iCK! Setup 1.1.0.exe` 다운로드
+2. 다운로드한 exe 파일 실행하여 설치
+3. **완전 오프라인 사용 가능** - 인터넷 연결 없이도 모든 기능 사용 가능
+4. 설치 후 바로 사용 시작!
+
+### 개발자용
+
+#### Prerequisites
 
 - Node.js (version 16 or higher)
 - npm or yarn
 
-### Development Setup
+#### Development Setup
 
-1. Clone or download this project
-2. Install dependencies:
+1. 프로젝트 클론 또는 다운로드
+2. 의존성 설치:
    ```bash
    npm install
    ```
 
-3. Run in development mode:
+3. 개발 모드로 실행:
    ```bash
    npm run electron-dev
    ```
 
-### Building for Production
+#### Building for Production
 
-To build a Windows executable:
+Windows 실행 파일 빌드:
 
 ```bash
 npm run dist:win
 ```
 
-The executable will be created in the `dist` folder.
+빌드된 실행 파일은 `dist` 폴더에 생성됩니다.
 
 ## 사용 방법
 
@@ -63,13 +75,20 @@ The executable will be created in the `dist` folder.
 - 필요 없는 라벨은 "삭제" 버튼을 클릭하여 제거
 - 라벨 이름에 따라 분류 디렉토리 내에 자동으로 하위 폴더 생성
 
-## Supported Image Formats
+## 📋 시스템 요구사항
 
-- JPEG (.jpg, .jpeg)
-- PNG (.png)
-- GIF (.gif)
-- BMP (.bmp)
-- WebP (.webp)
+- **운영 체제**: Windows 10 이상
+- **디스크 공간**: 약 200MB
+- **메모리**: 최소 4GB RAM 권장
+- **인터넷**: 설치 시에만 필요 (사용 시 불필요)
+
+## 🖼️ 지원하는 이미지 포맷
+
+- **JPEG** (.jpg, .jpeg)
+- **PNG** (.png)
+- **GIF** (.gif)
+- **BMP** (.bmp)
+- **WebP** (.webp)
 
 ## Project Structure
 
@@ -97,6 +116,30 @@ ick/
 - `npm run dist` - Build and package application
 - `npm run dist:win` - Build Windows executable
 
-## License
+## 🚀 버전 히스토리
 
-MIT License
+### v1.1.0 (현재)
+- 오프라인 완전 지원
+- 개선된 Electron 설정
+- 안정성 향상
+
+### v1.0.0
+- 초기 릴리스
+- 기본 이미지 분류 기능
+- 커스텀 라벨 지원
+
+## 🤝 기여하기
+
+1. 이 저장소를 Fork 하세요
+2. 새로운 기능 브랜치를 만드세요 (`git checkout -b feature/AmazingFeature`)
+3. 변경사항을 커밋하세요 (`git commit -m 'Add some AmazingFeature'`)
+4. 브랜치에 Push 하세요 (`git push origin feature/AmazingFeature`)
+5. Pull Request를 열어주세요
+
+## 📝 라이선스
+
+MIT License - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+
+## 📞 문의
+
+프로젝트 관련 문의나 버그 리포트는 [Issues](https://github.com/your-repo/ick/issues)에서 해주세요.
