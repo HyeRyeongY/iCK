@@ -10,7 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #1a1a1a;
+  background-color: #1A1D2A;
   color: #ffffff;
   overflow: hidden;
 }
@@ -27,14 +27,88 @@ body {
   flex-direction: column;
 }
 
-.header {
-  background-color: #2d2d2d;
-  padding: 12px 20px;
-  border-bottom: 1px solid #404040;
+/* 커스텀 타이틀바 */
+.custom-titlebar {
   display: flex;
-  justify-content: space-between;
+  height: 32px;
+  background-color: #242936;
+  border-bottom: 1px solid #2F3441;
+  user-select: none;
+  position: relative;
+  z-index: 1000;
+}
+
+.titlebar-drag-region {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  -webkit-app-region: drag;
+  padding-left: 12px;
+}
+
+.titlebar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.titlebar-logo {
+  height: 16px;
+  width: auto;
+}
+
+.titlebar-controls {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-button {
+  width: 46px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.titlebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.titlebar-button.close:hover {
+  background-color: #e81123;
+}
+
+.titlebar-button svg {
+  opacity: 0.8;
+}
+
+.titlebar-button:hover svg {
+  opacity: 1;
+}
+
+.header {
+  background-color: #212633;
+  padding: 12px 20px;
+  border-bottom: 1px solid #2F3441;
+  display: flex;
+  justify-content: center;
   align-items: center;
   flex-shrink: 0;
+}
+
+.header-content {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header h1 {
@@ -49,18 +123,18 @@ body {
 }
 
 .button {
-  background-color: #4a90e2;
+  background-color: #1366e4;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .button:hover {
-  background-color: #357abd;
+  background-color: #0051ca;
 }
 
 .button:disabled {
@@ -70,15 +144,16 @@ body {
 
 .button.secondary {
   background-color: #666;
+  border: 1px solid #9DEAFF;
 }
 
 .button.secondary:hover {
-  background-color: #777;
+  background-color: #555;
 }
 
 .status-text {
   font-size: 14px;
-  color: #ccc;
+  color: #9DEAFF;
 }
 
 .main-content {
@@ -93,7 +168,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0f0f0f;
+  background-color: #141720;
   position: relative;
 }
 
@@ -112,9 +187,9 @@ body {
 }
 
 .controls-bar {
-  background-color: #2d2d2d;
+  background-color: #212633;
   padding: 16px 20px;
-  border-top: 1px solid #404040;
+  border-top: 1px solid #2F3441;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -138,7 +213,7 @@ body {
 }
 
 .button.normal:hover {
-  background-color: #218838;
+  background-color: #1e7e34;
 }
 
 .button.abnormal {
@@ -146,7 +221,7 @@ body {
 }
 
 .button.abnormal:hover {
-  background-color: #c82333;
+  background-color: #bd2130;
 }
 
 .image-info {
@@ -166,15 +241,19 @@ body {
   align-items: flex-start;
   gap: 30px;
   padding: 40px;
+  overflow: hidden;
 }
 
 .setup-card {
-  background-color: #2d2d2d;
+  background-color: #212633;
   border-radius: 8px;
   padding: 30px;
   max-width: 500px;
   width: 100%;
-  border: 1px solid #404040;
+  border: 1px solid #2F3441;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .setup-card h2 {
@@ -195,15 +274,16 @@ body {
 }
 
 .setup-item .path-display {
-  background-color: #1a1a1a;
-  border: 1px solid #404040;
+  background-color: #141720;
+  border: 1px solid #2F3441;
   border-radius: 4px;
   padding: 8px 12px;
-  margin-bottom: 8px;
+  margin-top: 8px;
   font-family: monospace;
   font-size: 13px;
-  color: #ccc;
+  color: #9DEAFF;
   word-break: break-all;
+  margin-bottom: 8px;
 }
 
 .setup-item .path-display.empty {
@@ -212,14 +292,17 @@ body {
 }
 
 .keyboard-shortcuts {
-  background-color: #2d2d2d;
+  background-color: #212633;
   border-radius: 8px;
   padding: 20px;
   max-width: 300px;
   width: 100%;
-  border: 1px solid #404040;
+  border: 1px solid #2F3441;
   flex-shrink: 0;
   align-self: flex-start;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .keyboard-shortcuts h3 {
@@ -253,6 +336,7 @@ body {
   border-radius: 4px;
   margin-top: 10px;
   font-size: 14px;
+  border: 1px solid #e83e8c;
 }
 
 /* Custom Labels Styles */
@@ -266,15 +350,18 @@ body {
 .labels-list {
   max-height: 400px;
   overflow-y: auto;
-  border: 1px solid #404040;
+  border: 1px solid #2F3441;
   border-radius: 4px;
   padding: 10px;
-  background-color: #1a1a1a;
+  background-color: #1A1D2A;
+  .path-display {
+    margin-bottom: 0;
+  }
 }
 
 .label-config {
-  background-color: #2d2d2d;
-  border: 1px solid #404040;
+  background-color: #242936;
+  border: 1px solid #2F3441;
   border-radius: 4px;
   padding: 15px;
   margin-bottom: 10px;
@@ -288,7 +375,6 @@ body {
   display: flex;
   gap: 10px;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .label-key {
@@ -306,8 +392,8 @@ body {
 
 .label-name-input {
   flex: 1;
-  background-color: #1a1a1a;
-  border: 1px solid #404040;
+  background-color: #141720;
+  border: 1px solid #2F3441;
   border-radius: 4px;
   padding: 8px 12px;
   color: #fff;
@@ -316,7 +402,8 @@ body {
 
 .label-name-input:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #227BFF;
+  box-shadow: 0 0 0 2px rgba(23, 58, 234, 0.2);
 }
 
 .label-name-input::placeholder {
@@ -333,7 +420,7 @@ body {
 }
 
 .button.danger:hover {
-  background-color: #c82333;
+  background-color: #bd2130;
 }
 
 .empty-labels {
@@ -354,10 +441,20 @@ body {
   min-width: 80px;
   font-size: 12px;
   padding: 6px 12px;
+  background-color: #227BFF;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.classification-btn:hover {
+  background-color: #0f2db8;
 }
 
 .shortcut-key {
-  background-color: #404040;
+  background-color: #227BFF;
   color: #fff;
   padding: 4px 8px;
   border-radius: 4px;
@@ -366,4 +463,67 @@ body {
   font-weight: bold;
   min-width: 24px;
   text-align: center;
+}
+/* 반응형 레이아웃 - 작은 창에서 스크롤 지원 */
+@media (max-width: 900px) {
+  .setup-screen {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .keyboard-shortcuts {
+    max-width: 100%;
+    order: -1;
+    max-height: 200px;
+  }
+  
+  .setup-card {
+    max-width: 100%;
+    max-height: calc(100vh - 280px);
+  }
+}
+
+@media (max-height: 600px) {
+  .setup-screen {
+    padding: 15px;
+  }
+  
+  .keyboard-shortcuts {
+    max-height: 150px;
+    padding: 15px;
+  }
+  
+  .setup-card {
+    max-height: calc(100vh - 200px);
+    padding: 20px;
+  }
+}
+
+/* 스크롤바 스타일링 */
+.keyboard-shortcuts::-webkit-scrollbar,
+.setup-card::-webkit-scrollbar,
+.labels-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.keyboard-shortcuts::-webkit-scrollbar-track,
+.setup-card::-webkit-scrollbar-track,
+.labels-list::-webkit-scrollbar-track {
+  background: #141720;
+  border-radius: 4px;
+}
+
+.keyboard-shortcuts::-webkit-scrollbar-thumb,
+.setup-card::-webkit-scrollbar-thumb,
+.labels-list::-webkit-scrollbar-thumb {
+  background: #2c3138;
+  border-radius: 4px;
+}
+
+.keyboard-shortcuts::-webkit-scrollbar-thumb:hover,
+.setup-card::-webkit-scrollbar-thumb:hover,
+.labels-list::-webkit-scrollbar-thumb:hover {
+  background: #474d55;
 }
