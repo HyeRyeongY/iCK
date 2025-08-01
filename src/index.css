@@ -118,14 +118,51 @@ body {
 
 .header-controls {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.progress-info {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  flex-shrink: 0;
+}
+
+.progress-details {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 6px;
+  background-color: #2F3441;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #1366e4;
+  transition: width 0.3s ease;
+  border-radius: 3px;
 }
 
 .button {
   background-color: #1366e4;
+  border: 1px solid #2d76e4;
   color: white;
-  border: none;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
@@ -141,23 +178,24 @@ body {
   background-color: #0051ca;
 }
 
-.button:disabled {
-  background-color: #666;
-  cursor: not-allowed;
-}
-
 .button.secondary {
-  background-color: #666;
-  border: 1px solid #9DEAFF;
+  background-color: #102575;
+  border-color: #1b3188;
 }
 
 .button.secondary:hover {
-  background-color: #555;
+  background-color: #15235e;
+}
+
+.button:disabled {
+  background-color: #353846 !important;
+  border-color: #353846;
+  cursor: not-allowed;
 }
 
 .status-text {
   font-size: 14px;
-  color: #9DEAFF;
+  color: #ccc;
 }
 
 .main-content {
@@ -241,6 +279,11 @@ body {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-shrink: 0;
+  flex-grow: 1;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: 70%;
 }
 
 .button.normal {
@@ -263,7 +306,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   color: #ccc;
   font-size: 14px;
 }
@@ -282,11 +325,11 @@ body {
 .setup-card {
   background-color: #212633;
   border-radius: 8px;
-  padding: 30px;
+  padding: 20px;
   max-width: 500px;
   width: 100%;
   border: 1px solid #2F3441;
-  max-height: calc(100vh - 160px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -295,7 +338,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 15px;
 }
 
 .setup-card h2 {
@@ -306,7 +349,6 @@ body {
 .setup-item {
   margin-bottom: 20px;
 }
-
 .setup-item label {
   display: block;
   margin-bottom: 8px;
@@ -314,17 +356,26 @@ body {
   color: #ccc;
 }
 
+.setup-item .setup-source {
+  display: flex;
+  margin-top: 8px;
+  gap: 8px;
+}
+.setup-item .setup-source .button{
+  padding: 8px;
+}
+
+
 .setup-item .path-display {
   background-color: #141720;
   border: 1px solid #2F3441;
   border-radius: 4px;
   padding: 8px 12px;
-  margin-top: 8px;
   font-family: monospace;
   font-size: 13px;
   color: #9DEAFF;
   word-break: break-all;
-  margin-bottom: 8px;
+  flex: 1 0 auto;
 }
 
 .setup-item .path-display.empty {
@@ -341,7 +392,7 @@ body {
   border: 1px solid #2F3441;
   flex-shrink: 0;
   align-self: flex-start;
-  max-height: calc(100vh - 160px);
+  max-height: calc(90vh - 120px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -350,6 +401,14 @@ body {
   margin-bottom: 15px;
   color: #fff;
   font-size: 18px;
+}
+.keyboard-shortcuts h4{
+  margin-top: 15px;
+  padding-top: 15px;
+  margin-bottom: 15px;
+  color: #fff;
+  font-size: 16px;
+  border-top: 1px solid #4b4b4b;
 }
 
 .shortcut-item {
@@ -361,13 +420,12 @@ body {
 }
 
 .shortcut-key {
-  background-color: #404040;
-  color: #fff;
+  background-color: #081130;
+  color: #f0f0f0;
   padding: 4px 8px;
   border-radius: 4px;
   font-family: monospace;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .error-message {
@@ -385,7 +443,7 @@ body {
   color: white;
   padding: 10px;
   border-radius: 4px;
-  margin-top: 10px;
+  margin: 10px 0;
   font-size: 14px;
   border: 1px solid #20c997;
 }
@@ -399,7 +457,7 @@ body {
 }
 
 .labels-list {
-  max-height: 400px;
+  max-height: 280px;
   overflow-y: auto;
   border: 1px solid #2F3441;
   border-radius: 4px;
@@ -407,7 +465,7 @@ body {
   background-color: #1A1D2A;
 }
 .labels-list .path-display {
-    margin-bottom: 0;
+    margin-top: 8px;
   }
 
 .label-config {
@@ -468,6 +526,7 @@ body {
 
 .button.danger {
   background-color: #dc3545;
+  border-color: #e93f4d;
 }
 
 .button.danger:hover {
@@ -508,17 +567,6 @@ body {
   background-color: #0f2db8;
 }
 
-.shortcut-key {
-  background-color: #227BFF;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 12px;
-  font-weight: bold;
-  min-width: 24px;
-  text-align: center;
-}
 /* 반응형 레이아웃 - 작은 창에서 스크롤 지원 */
 @media (max-width: 900px) {
   .setup-screen {
@@ -531,12 +579,12 @@ body {
   .keyboard-shortcuts {
     max-width: 100%;
     order: -1;
-    max-height: 200px;
+    max-height: calc(40vh - 40px);
   }
   
   .setup-card {
     max-width: 100%;
-    max-height: calc(100vh - 280px);
+    max-height: calc(60vh - 80px);
   }
 }
 
@@ -546,12 +594,12 @@ body {
   }
   
   .keyboard-shortcuts {
-    max-height: 150px;
+    max-height: calc(35vh - 30px);
     padding: 15px;
   }
   
   .setup-card {
-    max-height: calc(100vh - 200px);
+    max-height: calc(65vh - 50px);
     padding: 20px;
   }
 }
@@ -581,4 +629,155 @@ body {
 .setup-card::-webkit-scrollbar-thumb:hover,
 .labels-list::-webkit-scrollbar-thumb:hover {
   background: #474d55;
+}
+
+/* 축하 폭죽 애니메이션 */
+/* 이미지 영역 내 축하 폭죽 애니메이션 */
+.no-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.celebration-fireworks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 애니메이션 키프레임 */
+@keyframes bounce {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-20px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* 이미지 영역 전용 폭죽 스타일 */
+.celebration-text-small {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 20;
+}
+
+.celebration-text-small h2 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.celebration-text-small p {
+  font-size: 1.2rem;
+  color: #ccc;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.fireworks-container-small {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* 작은 폭죽 스타일 */
+.firework-small {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+}
+
+.spark-small {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  animation: explode-small 1.5s ease-out infinite;
+}
+
+/* 작은 폭죽 위치 */
+.firework-small-1 { top: 25%; left: 20%; animation-delay: 0s; }
+.firework-small-2 { top: 35%; left: 75%; animation-delay: 0.4s; }
+.firework-small-3 { top: 60%; left: 25%; animation-delay: 0.8s; }
+.firework-small-4 { top: 70%; left: 70%; animation-delay: 1.2s; }
+.firework-small-5 { top: 20%; left: 60%; animation-delay: 1.6s; }
+.firework-small-6 { top: 50%; left: 15%; animation-delay: 2s; }
+.firework-small-7 { top: 80%; left: 50%; animation-delay: 2.4s; }
+.firework-small-8 { top: 40%; left: 85%; animation-delay: 2.8s; }
+
+/* 작은 폭죽 색상 */
+.firework-small-1 .spark-small { background: #FF6B6B; }
+.firework-small-2 .spark-small { background: #4ECDC4; }
+.firework-small-3 .spark-small { background: #45B7D1; }
+.firework-small-4 .spark-small { background: #96CEB4; }
+.firework-small-5 .spark-small { background: #FFEAA7; }
+.firework-small-6 .spark-small { background: #DDA0DD; }
+.firework-small-7 .spark-small { background: #98D8C8; }
+.firework-small-8 .spark-small { background: #F7DC6F; }
+
+/* 8방향 원형 폭죽 애니메이션 */
+.spark-small:nth-child(1) { animation-name: explode-small-1; } /* 위 */
+.spark-small:nth-child(2) { animation-name: explode-small-2; } /* 오른쪽 위 */
+.spark-small:nth-child(3) { animation-name: explode-small-3; } /* 오른쪽 */
+.spark-small:nth-child(4) { animation-name: explode-small-4; } /* 오른쪽 아래 */
+.spark-small:nth-child(5) { animation-name: explode-small-5; } /* 아래 */
+.spark-small:nth-child(6) { animation-name: explode-small-6; } /* 왼쪽 아래 */
+.spark-small:nth-child(7) { animation-name: explode-small-7; } /* 왼쪽 */
+.spark-small:nth-child(8) { animation-name: explode-small-8; } /* 왼쪽 위 */
+
+@keyframes explode-small-1 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(0px, -60px); opacity: 0; }
+}
+
+@keyframes explode-small-2 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(42px, -42px); opacity: 0; }
+}
+
+@keyframes explode-small-3 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(60px, 0px); opacity: 0; }
+}
+
+@keyframes explode-small-4 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(42px, 42px); opacity: 0; }
+}
+
+@keyframes explode-small-5 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(0px, 60px); opacity: 0; }
+}
+
+@keyframes explode-small-6 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(-42px, 42px); opacity: 0; }
+}
+
+@keyframes explode-small-7 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(-60px, 0px); opacity: 0; }
+}
+
+@keyframes explode-small-8 {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(-42px, -42px); opacity: 0; }
 }

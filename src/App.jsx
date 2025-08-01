@@ -15,6 +15,9 @@ function App() {
     const [isMaximized, setIsMaximized] = useState(false);
     const [imageZoom, setImageZoom] = useState(1);
     const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+    const [totalImages, setTotalImages] = useState(0); // 시작할 때 전체 이미지 수
+    const [classifiedCount, setClassifiedCount] = useState(0); // 분류 완료된 이미지 수
+    const [showCelebration, setShowCelebration] = useState(false); // 축하 애니메이션 표시
 
     const currentImage = images[currentIndex];
 
@@ -216,6 +219,12 @@ function App() {
             setImages(imageList);
             setCurrentIndex(0);
 
+            // 초기 이미지 수 설정 (분류 시작 시점에서만)
+            if (totalImages === 0) {
+                setTotalImages(imageList.length);
+                setClassifiedCount(0);
+            }
+
             if (imageList.length === 0) {
                 setError("선택된 디렉토리에서 이미지를 찾을 수 없습니다");
             }
@@ -293,6 +302,9 @@ function App() {
                 newImages.splice(lastAction.originalIndex, 0, lastAction.imagePath);
                 setImages(newImages);
 
+                // 분류 완료된 이미지 수 감소
+                setClassifiedCount((prev) => Math.max(0, prev - 1));
+
                 // 인덱스 조정
                 setCurrentIndex(lastAction.originalIndex);
 
@@ -337,6 +349,16 @@ function App() {
                 // Remove the classified image from the list
                 const newImages = images.filter((_, index) => index !== currentIndex);
                 setImages(newImages);
+
+                // 분류 완료된 이미지 수 증가
+                const newClassifiedCount = classifiedCount + 1;
+                setClassifiedCount(newClassifiedCount);
+
+                // 모든 이미지 분류 완료 감지 (중복 방지)
+                if (newImages.length === 0 && totalImages > 0 && newClassifiedCount === totalImages && !showCelebration) {
+                    setShowCelebration(true);
+                    // 자동으로 꺼지지 않음 - 수동으로만 제어
+                }
 
                 // Adjust current index if necessary
                 if (currentIndex >= newImages.length && newImages.length > 0) {
@@ -431,6 +453,11 @@ function App() {
         setCurrentIndex(0);
         setError("");
         setHistory([]);
+        // 진행률 리셋
+        setTotalImages(0);
+        setClassifiedCount(0);
+        // 폭죽 숨기기
+        setShowCelebration(false);
         // 저장된 설정은 유지하되, 분류 상태만 리셋
     };
 
@@ -444,6 +471,11 @@ function App() {
         setCurrentIndex(0);
         setError("");
         setHistory([]);
+        // 진행률 리셋
+        setTotalImages(0);
+        setClassifiedCount(0);
+        // 폭죽 숨기기
+        setShowCelebration(false);
         console.log("All settings cleared");
     };
 
@@ -590,6 +622,7 @@ function App() {
                             <span>실행 취소</span>
                             <span className="shortcut-key">Ctrl+Z</span>
                         </div>
+                        <h4>라벨 단축키</h4>
                         {labels.map((label, index) => (
                             <div key={index} className="shortcut-item">
                                 <span>{label.name || `라벨 ${index + 1}`}</span>
@@ -604,7 +637,7 @@ function App() {
                         <div className="setup-card-header">
                             <h2>설정</h2>
                             {(sourceDir || classificationDir || labels.length > 0) && (
-                                <button className="button" onClick={clearAllSettings} title="모든 설정을 초기화합니다">
+                                <button className="button secondary" onClick={clearAllSettings} title="모든 설정을 초기화합니다">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
                                     </svg>
@@ -612,28 +645,31 @@ function App() {
                                 </button>
                             )}
                         </div>
+                        {successMessage && <div className="success-message">{successMessage}</div>}
 
                         <div className="setup-item">
                             <label>소스 디렉토리 (분류할 이미지들):</label>
-                            <div className={`path-display ${!sourceDir ? "empty" : ""}`}>{sourceDir || "디렉토리가 선택되지 않음"}</div>
-                            <button className="button" onClick={selectSourceDirectory}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
-                                </svg>
-                                소스 디렉토리 선택
-                            </button>
+                            <div className="setup-source">
+                                <div className={`path-display ${!sourceDir ? "empty" : ""}`}>{sourceDir || "디렉토리가 선택되지 않음"}</div>
+                                <button className="button" onClick={selectSourceDirectory}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <div className="setup-item">
                             <label>분류 디렉토리 (분류된 이미지가 저장될 곳):</label>
-                            <div className={`path-display ${!classificationDir ? "empty" : ""}`}>{classificationDir || "디렉토리가 선택되지 않음"}</div>
-                            {classificationDir && <div style={{ fontSize: "12px", color: "#7e848dff", marginBottom: "8px" }}>라벨 폴더가 이 디렉토리 안에 자동으로 생성됩니다</div>}
-                            <button className="button" onClick={selectClassificationDirectory}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
-                                </svg>
-                                분류 디렉토리 선택
-                            </button>
+                            <div className="setup-source">
+                                <div className={`path-display ${!classificationDir ? "empty" : ""}`}>{classificationDir || "디렉토리가 선택되지 않음"}</div>
+                                <button className="button" onClick={selectClassificationDirectory}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {classificationDir && <div style={{ fontSize: "12px", color: "#7e848dff", marginTop: "8px" }}>라벨 폴더가 이 디렉토리 안에 자동으로 생성됩니다</div>}
                         </div>
 
                         <div className="setup-item">
@@ -657,7 +693,7 @@ function App() {
                                             <input type="text" placeholder="라벨 이름" value={label.name} onChange={(e) => updateLabelName(index, e.target.value)} className="label-name-input" />
                                             <button className="button small danger" onClick={() => removeLabel(index)}>
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                                    <path d="M19 13H5v-2h14v2z" />
                                                 </svg>
                                                 삭제
                                             </button>
@@ -680,14 +716,13 @@ function App() {
                         </div>
 
                         <button className="button" onClick={startClassification} disabled={!sourceDir || !classificationDir || labels.length === 0}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
                             분류 시작
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 11v2h12.17l-5.59 5.59L12 20l8-8-8-8-1.41 1.41L16.17 11H4z" />
+                            </svg>
                         </button>
 
                         {error && <div className="error-message">{error}</div>}
-                        {successMessage && <div className="success-message">{successMessage}</div>}
                     </div>
                 </div>
             </div>
@@ -738,13 +773,23 @@ function App() {
             <header className="header">
                 <div className="header-content">
                     <div className="header-controls">
-                        <span className="status-text">{images.length > 0 ? `이미지 ${currentIndex + 1} / ${images.length}` : "남은 이미지 없음"}</span>
-                        <button className="button" onClick={resetConfiguration}>
+                        <button className="button secondary" onClick={resetConfiguration}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
                             </svg>
                             설정 화면으로
                         </button>
+                        <div className="progress-info">
+                            <span className="status-text">{images.length > 0 ? `남은 이미지 ${images.length} 개` : "분류 완료"}</span>
+                        </div>
+
+                        <div className="classification-controls">
+                            {labels.map((label, index) => (
+                                <button key={index} className="button classification-btn" style={{ backgroundColor: label.color }} onClick={() => classifyImage(index)} disabled={!currentImage || isProcessing}>
+                                    {isProcessing ? "처리 중..." : `${index === 9 ? "0" : index + 1} - ${label.name}`}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </header>
@@ -765,54 +810,75 @@ function App() {
                             {imageZoom !== 1 && <div className="zoom-info">{Math.round(imageZoom * 100)}% (최대 500%, R키로 리셋)</div>}
                         </div>
                     ) : (
-                        <div className="no-image">{images.length === 0 ? "모든 이미지가 분류되었습니다!" : "표시할 이미지가 없습니다"}</div>
+                        <div className="no-image-wrapper">
+                            {/* 축하 폭죽 애니메이션 - 이미지 영역에만 */}
+                            {showCelebration && (
+                                <div className="celebration-fireworks">
+                                    <div className="celebration-text-small">
+                                        <h2>🎉 분류 완료! 🎉</h2>
+                                        <p>분류된 이미지 {totalImages} 개</p>
+                                    </div>
+                                    <div className="fireworks-container-small">
+                                        {[...Array(8)].map((_, i) => (
+                                            <div key={i} className={`firework-small firework-small-${i + 1}`}>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                                <div className="spark-small"></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
 
                 <div className="controls-bar">
+                    <button className="button secondary" onClick={undoLastClassification} disabled={history.length === 0 || isProcessing}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+                        </svg>
+                        실행 취소 (Ctrl+Z)
+                    </button>
+
+                    <div className="image-info">
+                        <span>{currentImage ? currentImage.split("\\").pop() : "-"}</span>
+                        {totalImages > 0 && (
+                            <div className="progress-details">
+                                <div className="progress-bar">
+                                    <div className="progress-fill" style={{ width: `${(classifiedCount / totalImages) * 100}%` }} />
+                                </div>
+                                <span className="progress-text">
+                                    분류 완료: {classifiedCount} / {totalImages} ({Math.round((classifiedCount / totalImages) * 100)}%)
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="navigation-controls">
-                        <button className="button" onClick={moveToPrevious} disabled={currentIndex === 0 || images.length === 0}>
+                        <button className="button secondary" onClick={moveToPrevious} disabled={currentIndex === 0 || images.length === 0}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                             </svg>
                             이전
                         </button>
-                        <button className="button" onClick={moveToNext} disabled={currentIndex >= images.length - 1 || images.length === 0}>
+                        <button className="button secondary" onClick={moveToNext} disabled={currentIndex >= images.length - 1 || images.length === 0}>
                             다음
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                             </svg>
                         </button>
-                        <button className="button" onClick={undoLastClassification} disabled={history.length === 0 || isProcessing}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
-                            </svg>
-                            실행 취소 (Ctrl+Z)
-                        </button>
-                    </div>
-
-                    <div className="image-info">
-                        {currentImage && (
-                            <>
-                                <span>{currentImage.split("\\").pop()}</span>
-
-                                <span>{images.length > 0 ? `${currentIndex + 1} / ${images.length}` : "남은 이미지 없음"}</span>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="classification-controls">
-                        {labels.map((label, index) => (
-                            <button key={index} className="button classification-btn" style={{ backgroundColor: label.color }} onClick={() => classifyImage(index)} disabled={!currentImage || isProcessing}>
-                                {isProcessing ? "처리 중..." : `${index === 9 ? "0" : index + 1} - ${label.name}`}
-                            </button>
-                        ))}
                     </div>
                 </div>
             </div>
 
             {error && (
-                <div className="error-message" style={{ position: "fixed", top: "70px", right: "20px", zIndex: 1000 }}>
+                <div className="error-message" style={{ position: "fixed", top: "100px", left: "20px", zIndex: 1000 }}>
                     {error}
                 </div>
             )}
