@@ -164,8 +164,12 @@ function App() {
             return;
         }
 
+        const getKeyForIndex = (index) => {
+            return index === 9 ? "0" : (index + 1).toString();
+        };
+
         const newLabel = {
-            key: labels.length.toString(),
+            key: getKeyForIndex(labels.length),
             name: "",
             directory: classificationDir ? `${classificationDir}\\Untitled` : "",
             color: getRandomColor(),
@@ -177,10 +181,13 @@ function App() {
 
     const removeLabel = (index) => {
         const newLabels = labels.filter((_, i) => i !== index);
-        // 키를 다시 할당 (0부터 순서대로)
+        // 키를 다시 할당 (1~9, 0 순서대로)
+        const getKeyForIndex = (index) => {
+            return index === 9 ? "0" : (index + 1).toString();
+        };
         const updatedLabels = newLabels.map((label, i) => ({
             ...label,
-            key: i.toString(),
+            key: getKeyForIndex(i),
         }));
         setLabels(updatedLabels);
     };
@@ -397,9 +404,11 @@ function App() {
                 case "7":
                 case "8":
                 case "9":
-                    const keyIndex = parseInt(event.key);
-                    if (keyIndex < labels.length) {
-                        classifyImage(keyIndex);
+                    const keyPressed = event.key;
+                    // 키를 인덱스로 변환 (1~9는 index 0~8, 0은 index 9)
+                    const keyToIndex = keyPressed === "0" ? 9 : parseInt(keyPressed) - 1;
+                    if (keyToIndex >= 0 && keyToIndex < labels.length) {
+                        classifyImage(keyToIndex);
                     }
                     break;
                 default:
@@ -583,9 +592,9 @@ function App() {
                         </div>
                         {labels.map((label, index) => (
                             <div key={index} className="shortcut-item">
-                                <span>{label.name || `라벨 ${index}`}</span>
+                                <span>{label.name || `라벨 ${index + 1}`}</span>
                                 <span className="shortcut-key" style={{ backgroundColor: label.color }}>
-                                    {index}
+                                    {index === 9 ? "0" : index + 1}
                                 </span>
                             </div>
                         ))}
@@ -643,7 +652,7 @@ function App() {
                                     <div key={index} className="label-config">
                                         <div className="label-header">
                                             <span className="label-key" style={{ backgroundColor: label.color }}>
-                                                {index}
+                                                {index === 9 ? "0" : index + 1}
                                             </span>
                                             <input type="text" placeholder="라벨 이름" value={label.name} onChange={(e) => updateLabelName(index, e.target.value)} className="label-name-input" />
                                             <button className="button small danger" onClick={() => removeLabel(index)}>
@@ -795,7 +804,7 @@ function App() {
                     <div className="classification-controls">
                         {labels.map((label, index) => (
                             <button key={index} className="button classification-btn" style={{ backgroundColor: label.color }} onClick={() => classifyImage(index)} disabled={!currentImage || isProcessing}>
-                                {isProcessing ? "처리 중..." : `${index} - ${label.name}`}
+                                {isProcessing ? "처리 중..." : `${index === 9 ? "0" : index + 1} - ${label.name}`}
                             </button>
                         ))}
                     </div>
